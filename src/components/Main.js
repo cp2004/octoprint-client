@@ -5,10 +5,9 @@ import Temperatures from "./tabs/Temperatures";
 import Container from "react-bootstrap/Container";
 import {Card, Col, Row} from "react-bootstrap";
 
-const OctoPrint = window.OctoPrint;
 
 const Main = (props) => {
-    const [settings, setSettings] = useState({});
+    const [settings] = useState({});
 
     useEffect(() => {
         console.log("Effect? main")

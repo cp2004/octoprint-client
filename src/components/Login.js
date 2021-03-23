@@ -1,7 +1,4 @@
-import { useSnackbar } from 'notistack';
-
 import {useState} from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 import OctoPrintLogo from "../images/octoprint.png"
 import Button from "react-bootstrap/Button";
@@ -9,15 +6,13 @@ import Container from "react-bootstrap/Container";
 import {Col, Row} from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
-const OctoPrint = window.OctoPrint
-
 const Login = (props) => {
     const [state, setState] = useState({
         baseurl: "",
         apikey: "",
         save: false,
     })
-    const [connecting, setConnecting] = useState(false)
+    const [connecting] = useState(false)
 
     const onLoginClick = (event) => {
         props.onLogin(state.baseurl, state.apikey)

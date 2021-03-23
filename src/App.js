@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSnackbar } from 'notistack';
 
 import Container from 'react-bootstrap/Container';
@@ -35,7 +35,7 @@ const App = () => {
         apikey: ""
     })
 
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const { enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         // Test connection to OctoPrint, if successful then socket auth

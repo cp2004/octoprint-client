@@ -5,8 +5,9 @@ import Container from "react-bootstrap/Container";
 const OctoPrint = window.OctoPrint;
 
 const Terminal = (props) => {
-    const [autoscroll, setAutoscroll] = useState(true)
+    const [autoscroll] = useState(true)
     const [logLines, setLogLines] = useState([]);
+    /*
     const [printerState, setPrinterState] = useState({
         isErrorOrClosed: undefined,
         isOperational: undefined,
@@ -16,6 +17,7 @@ const Terminal = (props) => {
         isReady: undefined,
         isLoading: undefined,
     })
+     */
 
     const handleScroll = (event) => {
         const pos = event.nativeEvent.target.scrollTop;
@@ -27,9 +29,9 @@ const Terminal = (props) => {
         //}
     }
 
-    const toggleAutoScroll = () => {
-        setAutoscroll(prevState => !prevState)
-    }
+    // const toggleAutoScroll = () => {
+    //     setAutoscroll(prevState => !prevState)
+    // }
 
     useEffect(() => {
         const processData = (message) => {
