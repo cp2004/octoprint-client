@@ -28,10 +28,11 @@ const Main = (props) => {
             <NavBar settings={settings} logout={props.onLogout}/>
             <Container fluid>
                 <Row>
-                    <Col lg={2}>
+                    {/*<Col lg={2}>
                         Sidebar?
                     </Col>
-                    <Col lg={10}>
+                    */}
+                    <Col lg={12} className={"pt-3"}>
                         <Row>
                             <UiCard>
                                 <Temperatures />
