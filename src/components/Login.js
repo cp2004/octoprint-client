@@ -3,7 +3,7 @@ import {useState} from "react";
 import OctoPrintLogo from "../images/octoprint.png"
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import {Col, Row} from "react-bootstrap";
+import {Badge, Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
 const Login = (props) => {
@@ -49,6 +49,21 @@ const Login = (props) => {
                             required
                             autoFocus
                         />
+                        <OverlayTrigger
+                            key={"top"}
+                            placement={"top"}
+                            overlay={
+                                <Tooltip id={"https-tooltip"}>
+                                    Since this site is using https to serve content, it cannot be used
+                                    with http URLs as these are blocked by the browser
+                                </Tooltip>
+                            }
+                        >
+                            <div className={"mx-1"}>
+                                <Badge variant={"warning"}>Warning</Badge>{' '}
+                                Must be a <code>https</code> URL
+                            </div>
+                        </OverlayTrigger>
                         <label htmlFor="inputApikey" className="sr-only">Password</label>
                         <input
                             type="password"
