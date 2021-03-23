@@ -1,7 +1,11 @@
 .pre-scrollable {
-  min-height: $pre-scrollable-min-height;
+  min-height: $terminal-max-height;
 }
 
 .shadow-md {
   box-shadow: $box-shadown-md;
+}
+
+.pointer {
+  cursor: pointer;
 }

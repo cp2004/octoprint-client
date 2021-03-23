@@ -637,7 +637,6 @@
             return;
         }
         var index = this.registeredHandlers[message].indexOf(handler)
-        console.log(index)
         if (index > -1){
             this.registeredHandlers[message].splice(index, 1)
         }

@@ -1,7 +1,7 @@
 $enable-shadows: true;
 
-$pre-scrollable-max-height: 30em;
-$pre-scrollable-min-height: $pre-scrollable-max-height;  // Fixed height :)
+$terminal-max-height: 80%;
+$pre-scrollable-min-height: $terminal-max-height;  // Fixed height :)
 
 // Halfway shadow style
 $box-shadown-md: 0 0.25rem 0.5rem rgba($black, .1)

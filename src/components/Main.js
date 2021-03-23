@@ -14,7 +14,7 @@ const Main = (props) => {
     }, [])
 
     const UiCard = (props) => (
-        <Col lg={6} md={6} sm={12}>
+        <Col lg={6} md={12} sm={12}>
             <Card className={"shadow-md"}  style={{"height": "500px"}}>
                 <Card.Body>
                     {props.children}
