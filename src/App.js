@@ -41,6 +41,11 @@ const App = () => {
         // Test connection to OctoPrint, if successful then socket auth
         OctoPrint.options.baseurl = clientOpts.baseurl
         OctoPrint.options.apikey = clientOpts.apikey
+        if (!clientOpts.baseurl){
+            setLoading(false)
+            setLogin(true)
+            return
+        }
         OctoPrint.socket.connect()
 
         const socketAuth = (name, session) => {
@@ -89,7 +94,7 @@ const App = () => {
                 setLogin(true)
             })
 
-    }, [clientOpts, setLoading, setLogin, enqueueSnackbar])  // Should only run when baseurl or key change, afaik hooks
+    }, [clientOpts, setLoading, setLogin, enqueueSnackbar])  // Runs whenever the client options change, connecting
 
     const Loading = () => {
         return (
