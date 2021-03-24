@@ -6,6 +6,10 @@
   box-shadow: $box-shadown-md;
 }
 
-.pointer {
+.copy-terminal {
   cursor: pointer;
+}
+
+.copy-terminal:hover {
+  text-decoration: underline;
 }

@@ -1,8 +1,13 @@
 import {useEffect, useRef, useState} from "react";
 import {nanoid} from "nanoid/non-secure";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faCopy} from "@fortawesome/free-regular-svg-icons"
+
 import Container from "react-bootstrap/Container";
 import {Form, FormControl, InputGroup, Overlay, ToggleButton, Tooltip} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+
 import {CopyToClipboard} from "react-copy-to-clipboard";
 
 const OctoPrint = window.OctoPrint;
@@ -244,7 +249,10 @@ const TerminalStatus = (props) => {
             <span className={"ml-2"}>Showing {props.logLines.length} lines</span>
             <div className={"float-right"}>
                 <CopyToClipboard text={copyLines} onCopy={onCopy}>
-                    <span className={"pointer"} ref={copyRef}>Copy to clipboard</span>
+                    <span className={"copy-terminal"} ref={copyRef}>
+                        <FontAwesomeIcon icon={faCopy} />
+                        {' '}Copy to clipboard
+                    </span>
                 </CopyToClipboard>
             </div>
             <Overlay target={copyRef.current} show={show} placement={"top"}>
