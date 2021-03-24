@@ -5,16 +5,35 @@ import Temperatures from "./tabs/Temperatures";
 import Container from "react-bootstrap/Container";
 import {Card, Col, Row} from "react-bootstrap";
 
+const OctoPrint = window.OctoPrint
 
 const Main = (props) => {
-    const [settings] = useState({});
+    const [settings, setSettings] = useState({
+        api: {},
+        appearance: {},
+        devel: {},
+        feature: {},
+        folder: {},
+        gcodeAnalysis: {},
+        plugins: {},
+        printer: {},
+        scripts: {},
+        serial: {},
+        slicing: {},
+        system: {},
+        temperature: {},
+        terminalFilters: {},
+        webcam: {}
+    });
 
     useEffect(() => {
-        console.log("Effect? main")
+        OctoPrint.settings.get().done((response) => {
+            setSettings(response)
+        })
     }, [])
 
     const UiCard = (props) => (
-        <Col lg={6} md={12} sm={12}>
+        <Col lg={6} md={12} sm={12} className={"p-2"}>
             <Card className={"shadow-md"}  style={{"height": "500px"}}>
                 <Card.Body>
                     {props.children}

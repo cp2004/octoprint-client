@@ -3,17 +3,11 @@ import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 
 const NavBar = (props) => {
-    const name = () =>{
-        if (props.settings.appearance !== undefined && props.settings.appearance.name !== "") {
-            return props.settings.appearance.name || "OctoPrint"
-        } else {
-            return "OctoPrint"
-        }
-    }
+    const name = (props.settings.appearance !== "" && props.settings.appearance.name) || "OctoPrint"
 
     return (
         <Navbar bg="dark" variant="dark">
-            <Navbar.Brand>{name()}</Navbar.Brand>
+            <Navbar.Brand>{name}</Navbar.Brand>
             <Nav className="mr-auto">
                 <Nav.Link>Nothing here yet :)</Nav.Link>
             </Nav>
