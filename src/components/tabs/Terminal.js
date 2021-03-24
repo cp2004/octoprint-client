@@ -11,16 +11,17 @@ const Terminal = (props) => {
     const [autoscroll, setAutoscroll] = useState(true)
     const [logLines, setLogLines] = useState([]);
 
-    /* const [printerState, setPrinterState] = useState({
-        isErrorOrClosed: undefined,
-        isOperational: undefined,
-        isPrinting: undefined,
-        isPaused: undefined,
-        isError: undefined,
-        isReady: undefined,
-        isLoading: undefined,
+    const [printerState, setPrinterState] = useState({
+        operational: undefined,
+        paused: undefined,
+        printing: undefined,
+        pausing: undefined,
+        cancelling: undefined,
+        sdReady: undefined,
+        error: undefined,
+        ready: undefined,
+        closedOrError: undefined,
     })
-     */
 
     const handleScroll = (event) => {
         const top = event.nativeEvent.target.scrollTop;
@@ -38,10 +39,12 @@ const Terminal = (props) => {
     useEffect(() => {
         const processData = (message) => {
             const logs = message.data.logs;
+            const stateFlags = message.data.state.flags
 
             setLogLines(prevState => (
                 prevState.concat(logs.map((line) => toInternalFormat(line))).slice(autoscroll ? -300 : -1500)
             ))
+            setPrinterState(stateFlags)
         }
         OctoPrint.socket.onMessage("history", processData)
         OctoPrint.socket.onMessage("current", processData)
@@ -55,7 +58,7 @@ const Terminal = (props) => {
         <>
             <Container fluid>
                 <TerminalLog logLines={logLines} autoscroll={autoscroll} onScroll={handleScroll}/>
-                <TerminalInput />
+                <TerminalInput printerState={printerState}/>
                 <TerminalStatus logLines={logLines} autoscroll={autoscroll} toggleAutoscroll={toggleAutoScroll} />
             </Container>
         </>
@@ -195,15 +198,19 @@ const TerminalInput = (props) => {
             );
         }
     }
+
+    const ready = props.printerState.ready
+
     return (
         <InputGroup>
             <FormControl
                 type="text"
-                placeholder="Enter a command"
+                placeholder={ready ? "Enter a command" : "Printing..."}
                 value={state.command}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 onKeyUp={handleKeyUp}
+                disabled={!ready}
             />
             <InputGroup.Append>
                 <Button onClick={sendCommand} variant={"outline-primary"}>Send</Button>
