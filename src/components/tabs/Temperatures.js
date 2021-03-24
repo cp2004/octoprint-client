@@ -125,7 +125,9 @@ const Temperatures = () => {
     React.useEffect(() => {
         const processData = (msg) => {
             const data = msg.data.temps
-            setTempData(prevState => prevState.concat(data).slice(-300))  // TODO tune number of updates to keep
+            if (data.length > 0){
+                setTempData(prevState => prevState.concat(data).slice(-300))  // TODO tune number of updates to keep
+            }
         }
         OctoPrint.socket.onMessage("history", processData)
         OctoPrint.socket.onMessage("current", processData)
