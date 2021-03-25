@@ -2,6 +2,7 @@ import {useState, useEffect} from "react"
 import NavBar from "./NavBar";
 import Terminal from "./tabs/Terminal";
 import Temperatures from "./tabs/Temperatures";
+import PrinterState from "./PrinterState";
 import Container from "react-bootstrap/Container";
 import {Card, Col, Row} from "react-bootstrap";
 import useEvent from "../hooks/useEvent"
@@ -57,10 +58,9 @@ const Main = (props) => {
             <NavBar settings={settings} logout={props.onLogout}/>
             <Container fluid>
                 <Row>
-                    {/*<Col lg={2}>
-                        Sidebar?
+                    <Col xs={12} className={"pt-3"}>
+                        <PrinterState />
                     </Col>
-                    */}
                     <Col lg={12} className={"pt-3"}>
                         <Row>
                             <UiCard>
