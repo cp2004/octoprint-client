@@ -9,15 +9,15 @@ import Button from "react-bootstrap/Button";
 const OctoPrint = window.OctoPrint;
 
 const actualColours = [
-    "#EE0202",
+    "#ff0000",
     "#3A02EE",
-    "#0AEA47"
+    "#ffa500"
 ]
 
 const targetColours = [
-    "#02EEEE",
-    "#B7EE02",
-    "#EA0AAE"
+    "rgba(255,128,128,1)",
+    "#8080ff",
+    "#fed280"
 ]
 
 const TempGraph = (props) => {
