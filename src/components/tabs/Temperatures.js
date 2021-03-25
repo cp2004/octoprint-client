@@ -1,6 +1,10 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Table from "react-bootstrap/Table";
+import {FormControl, InputGroup} from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faMinus, faCheck } from '@fortawesome/free-solid-svg-icons'
+import Button from "react-bootstrap/Button";
 
 const OctoPrint = window.OctoPrint;
 
@@ -81,34 +85,169 @@ const TempControls = (props) => {
     const tools = props.tools
     const tempData = props.tempData;
 
-    /*
-    const TempSet = (tool) => {
-        const Target =
+    const [targets, setTargets] = useState({})
+    const [newTargets, setNewTargets] = useState({
+        // Give each possible target an initial value, to prevent uncontrolled components
+        bed: "",
+        chamber: "",
+        tool0: "",
+        tool1: "",
+        tool2: "",
+        tool3: "",
+        tool4: "",
+        tool5: "",
+        tool6: "",
+        tool7: "",
+        tool8: "",
+        tool9: "",
+    })
+
+    useEffect(() => {
+        // Set actual targets every update of tempData or tools
+        // This is what the server thinks the target is, separate from any user input
+        const newTargets = {}
+        tools.forEach(tool => {
+            newTargets[tool] = tempData.length > 0 ? tempData[tempData.length - 1][tool].target : 0
+        })
+        setTargets(newTargets)
+    }, [tools, tempData, setTargets])  // Set actual targets every update of tempData or tools
+
+    const onTargetChange = (event) => {
+        // Handle changing the target nicely, checking validity
+        let value = event.target.value
+        const name = event.target.name;
+
+        if (value !== ""){
+            // If the value is not empty, it must be a number, so abort if it is anything else
+            // "" is the only allowed non-number state, like nothing - but setting to undefined upsets react
+            try {
+                value = parseInt(event.target.value);
+                if (isNaN(value)) return;
+            } catch (e) {return} // If it can't be parsed to int, don't update
+
+            if (!(0 <= value <= 999)) return
+        }
+
+        setNewTargets(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
     }
 
-     */
+    const onTargetKeyDown = (name, event) => {
+        // Handle enter to send here
+        if (event.keyCode === 13){
+            saveChange(name)
+        }
+    }
+
+    const changeTarget = (tool, difference) => {
+        setNewTargets(prevState => {
+            let newValue
+            if (prevState[tool] === "") {
+                // Empty string means 'no value' so start at the current target from the server
+                newValue = targets[tool] + difference
+            } else {
+                // Add to the current 'new value
+                newValue = newTargets[tool] + difference
+            }
+
+            // Abort any changes if that is out of bounds
+            if (!(0 <= newValue <= 999)) return prevState
+
+            return {
+                ...prevState,
+                [tool]: newValue
+            }
+        })
+    }
+
+    const increaseTarget = (tool) => {
+        changeTarget(tool, 1)
+    }
+
+    const decreaseTarget = (tool) => {
+        changeTarget(tool, -1)
+    }
+
+    const saveChange = (tool) => {
+        const value = newTargets[tool]
+
+        const resetChange = (tool) => {
+            // Small hack to avoid delays between setting the target and it appearing in the box from socket
+            setTargets(prevState => ({
+                ...prevState,
+                [tool]: value
+            }))
+            setNewTargets(prevState => ({
+                ...prevState,
+                [tool]: "",
+            }))
+        }
+
+        if (tool.includes("bed")) {
+            OctoPrint.printer.setBedTargetTemperature(value).done(() => resetChange(tool))
+        } else if (tool.includes("chamber")) {
+            OctoPrint.printer.setChamberTargetTemperature(value).done(() => resetChange(tool))
+        } else {
+            OctoPrint.printer.setToolTargetTemperatures({
+                [tool]: value
+            }).done(() => resetChange(tool))
+        }
+    }
 
     const rows = tools.map((tool, index) => (
         <tr key={"item-" + index}>
-            <td>
+            <td className={"text-center"}>
                 {capitalizeFirstLetter(tool)}
             </td>
-            <td>
+            <td className={"text-center"}>
                 {tempData[tempData.length - 1][tool].actual + "°C"}
             </td>
-            <td>
+            <td className={"text-center"}>
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <Button onClick={() => decreaseTarget(tool)} variant="secondary">
+                            <FontAwesomeIcon icon={faMinus}/>
+                        </Button>
+                    </InputGroup.Prepend>
 
+                    <FormControl
+                        name={tool}
+                        value={newTargets[tool]}
+                        placeholder={targets[tool] === 0 ? "off" : targets[tool]}
+                        onChange={onTargetChange}
+                        onKeyDown={(event) => onTargetKeyDown(tool, event)}
+                    />
+
+                    <InputGroup.Append>
+                        <InputGroup.Text>°C</InputGroup.Text>
+                        <Button onClick={() => increaseTarget(tool)} variant="secondary">
+                            <FontAwesomeIcon icon={faPlus}/>
+                        </Button>
+                    </InputGroup.Append>
+
+                    <Button className={"ml-1"} variant={"primary"} onClick={() => saveChange(tool)} disabled={newTargets[tool] === ""}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                </InputGroup>
+            </td>
+            <td className={"text-center"}>
+                :)
             </td>
         </tr>
     ))
 
+    // TODO convert from table to responsive something
+
     return (
         <Table>
-            <thead>
+            <thead className={"thead-light"}>
             <tr>
-                <th>#</th>
-                <th>Actual</th>
-                <th>Target</th>
+                <th style={{"width": "20%"}} className={"text-center"}>#</th>
+                <th style={{"width": "20%"}} className={"text-center"}>Actual</th>
+                <th style={{"width": "50%"}} className={"text-center"}>Target</th>
+                <th style={{"width": "10%"}} className={"text-center"}>Offset</th>
             </tr>
             </thead>
             <tbody>

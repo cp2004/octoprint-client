@@ -72,7 +72,7 @@ const Main = (props) => {
                         </Row>
                         <Row>
                             <UiCard>
-                                <h3>Hello :)</h3>
+                                <h3>Control?</h3>
                             </UiCard>
                         </Row>
                     </Col>
