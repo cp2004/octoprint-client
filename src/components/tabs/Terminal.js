@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCopy} from "@fortawesome/free-regular-svg-icons"
 
 import Container from "react-bootstrap/Container";
-import {Form, FormControl, InputGroup, Overlay, ToggleButton, Tooltip} from "react-bootstrap";
+import {FormControl, InputGroup, Overlay, Tooltip} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 import {CopyToClipboard} from "react-copy-to-clipboard";
@@ -60,13 +60,13 @@ const Terminal = (props) => {
     }, [autoscroll])
 
     return (
-        <>
+        <div style={{"height": "500px"}}>
             <Container fluid>
                 <TerminalLog logLines={logLines} autoscroll={autoscroll} onScroll={handleScroll}/>
                 <TerminalInput printerState={printerState}/>
                 <TerminalStatus logLines={logLines} autoscroll={autoscroll} toggleAutoscroll={toggleAutoScroll} />
             </Container>
-        </>
+        </div>
     )
 }
 
@@ -218,7 +218,7 @@ const TerminalInput = (props) => {
                 disabled={!ready}
             />
             <InputGroup.Append>
-                <Button onClick={sendCommand} variant={"outline-primary"}>Send</Button>
+                <Button onClick={sendCommand} variant={"outline-primary"} disabled={!ready}>Send</Button>
             </InputGroup.Append>
         </InputGroup>
     )

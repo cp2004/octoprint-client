@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import Table from "react-bootstrap/Table";
-import {FormControl, InputGroup} from "react-bootstrap";
+import {FormControl, InputGroup, Table, Button} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus, faCheck } from '@fortawesome/free-solid-svg-icons'
-import Button from "react-bootstrap/Button";
 
 const OctoPrint = window.OctoPrint;
 
@@ -290,10 +288,10 @@ const Temperatures = () => {
     )
 
     return (
-        <>
+        <div style={{"height": "500px"}}>
             <TempGraph tempData={tempData} tools={tools}/>
             <TempControls tempData={tempData} tools={tools}/>
-        </>
+        </div>
     )
 }
 

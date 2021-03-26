@@ -3,16 +3,16 @@ import NavBar from "./NavBar";
 import Terminal from "./tabs/Terminal";
 import Temperatures from "./tabs/Temperatures";
 import PrinterState from "./PrinterState";
-import Container from "react-bootstrap/Container";
-import {Card, Col, Row} from "react-bootstrap";
+import {Card, Col, Row, Container} from "react-bootstrap";
 import useEvent from "../hooks/useEvent"
+import Control from "./tabs/Control";
 
 const OctoPrint = window.OctoPrint
 
 const UiCard = (props) => {
     return (
         <Col lg={6} md={12} sm={12} className={"p-2"}>
-            <Card className={"shadow-md"} style={{"height": "500px"}}>
+            <Card className={"shadow-md"} style={{"minHeight": "500px"}}>
                 <Card.Body>
                     {props.children}
                 </Card.Body>
@@ -72,7 +72,10 @@ const Main = (props) => {
                         </Row>
                         <Row>
                             <UiCard>
-                                <h3>Control?</h3>
+                                <Control settings={settings}/>
+                            </UiCard>
+                            <UiCard>
+                                <h3>File manager?</h3>
                             </UiCard>
                         </Row>
                     </Col>

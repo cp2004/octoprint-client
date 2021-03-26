@@ -1,10 +1,7 @@
 import {useState} from "react";
 
 import OctoPrintLogo from "../images/octoprint.png"
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import {Badge, Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import Spinner from "react-bootstrap/Spinner";
+import {Badge, Col, OverlayTrigger, Row, Tooltip, Button, Container, Spinner} from "react-bootstrap";
 
 const Login = (props) => {
     const [state, setState] = useState({

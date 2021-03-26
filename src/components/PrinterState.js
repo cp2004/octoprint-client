@@ -25,8 +25,6 @@ const PrinterState = (props) => {
         printTimeLeftOrigin: undefined,
     })
 
-    const [loading, setLoading] = useState(false)
-
     useEffect(() => {
         const handleMessage = (msg) => {
             setPrinterState(msg.data.state)
