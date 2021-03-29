@@ -24,12 +24,12 @@ const TempGraph = (props) => {
 
     const actualLines = tools.map((tool, index) => (
         <Line key={"actual" + index} type="monotone" dataKey={tool + ".actual"} stroke={actualColours[index]}
-              dot={false}/>
+              dot={false} isAnimationActive={false}/>
     ))
 
     const targetLines = (tools.map((tool, index) =>
         <Line key={"target" + index} type="monotone" dataKey={tool + ".target"} stroke={targetColours[index]}
-              dot={false} strokeDasharray="3 3"/>
+              dot={false} strokeDasharray="3 3" isAnimationActive={false}/>
     ))
 
     const legendFormatter = (value) => <span>{capitalizeFirstLetter(value.split(".")[0])}</span>
