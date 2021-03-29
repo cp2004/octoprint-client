@@ -1,14 +1,32 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ButtonGroup, Card, Col, Container, Row, ToggleButton, Button} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp, faArrowRight, faArrowDown, faArrowLeft, faHome, faCamera} from "@fortawesome/free-solid-svg-icons";
+import { usePageVisibility } from 'react-page-visibility';
 
 const OctoPrint = window.OctoPrint
 
 const Control = (props) => {
-    const webcamUrl = props.settings.webcam.webcamEnabled && props.settings.webcam.streamUrl
+    const webcamUrl = (
+        props.settings.webcam.webcamEnabled && (
+            (props.settings.webcam.streamUrl).startsWith("http")
+                ? props.settings.webcam.streamUrl
+                :  OctoPrint.options.baseurl + "/" + props.settings.webcam.streamUrl
+        )
+    )
+
+    const isVisible = usePageVisibility()
 
     const [jogValue, setJogValue] = useState('1');
+    const [webcamError, setWebcamError] = useState(false)
+    const [webcamLoaded, setWebcamLoaded] = useState(false)
+
+    useEffect(() =>{
+        if (!isVisible) {
+            setWebcamLoaded(false)
+            setWebcamError(false)
+        }
+    }, [isVisible])
 
     const onJogValueChange = (e) => setJogValue(e.currentTarget.value)
 
@@ -42,13 +60,34 @@ const Control = (props) => {
                     <JogSizeSlider value={jogValue} onChange={onJogValueChange} />
                 </Col>
             </Row>
-            {webcamUrl &&
+            {webcamUrl && isVisible &&
                 <Card className={"m-3"}>
                     <Card.Header as={"h5"} className={"text-center"}>
                         <strong><FontAwesomeIcon icon={faCamera}/>{" Webcam"}</strong>
                     </Card.Header>
                     <Card.Body eventKey="0">
-                        <img alt={"Webcam Stream"} src={webcamUrl} width={"100%"} />
+                        {!webcamLoaded && !webcamError &&
+                        <div className={"text-center"}>
+                            <div className={"spinner"} />
+                            <p>Loading...</p>
+                        </div>
+                        }
+                        {
+                            !webcamError
+                                ? <img
+                                    alt={"Webcam Stream"}
+                                    src={webcamUrl}
+                                    width={"100%"}
+                                    onError={() => setWebcamError(true)}
+                                    onLoad={() => setWebcamLoaded(true)}
+                                    style={{visibility: webcamLoaded}}
+                                />
+                                :
+                                <div className={"text-center"}>
+                                    <p>Webcam stream failed to load</p>
+                                    <p>Currently configured URL: <a href={webcamUrl}>{webcamUrl}</a></p>
+                                </div>
+                        }
                     </Card.Body>
                 </Card>
             }
